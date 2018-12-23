@@ -2,12 +2,12 @@
 
 Moved from this repo (https://github.com/tomaskovacik/arduino/tree/master/VW_radio_remote_control)  to separate repository when it became library.
 
-# Instalation of library
+## Instalation of library
 
 Refer to oficial arduino guide here: https://www.arduino.cc/en/Guide/Libraries
-Download content of repository and extract it into arduino_sketchfolder/library directory.
+Download content of repository and extract it into arduinoSketchFolder/library directory.
 
-#How to use it
+## How to use it
 
 Example directory has 2 examples, take look at them.
 
@@ -57,25 +57,14 @@ void scan(); //send predefined code for SCAN button
 void mode(); //send predefined code for MODE button
 ```
 
+## Examples
 
-
-
-Arduino (1.0 and up) stuff related to Audi radios (probably also for VW, Skoda, Seat)
-remote control protocol.  This information is for vehicles where the radio
-does not use CAN bus.
+Library icludes two examples, both using ebay LCD shield(2x16) with 5 buttons on A0. Examples use  pin 2 of arduino as output to radio (remote signal `REM`).
 
 - code_finder is sketchup for finding all codes understended by my audi concert/chorus 1 radios
 - emulator is sketchup emulating audi MFSW
-- dumps of audi steering wheel controls to HU(radio) made by https://github.com/gillham/logic_analyzer
-- audi_MFSW_eletric_connection_schematics.pdf is how and where is what connected in car ...
-- remote_control_codes_control_unit_to_radio.ods and steering_wheel_to_control_unit.ods analyzis of OLS ouput in opendocument format
 
-using ebay LCD shield(2x16) with 5 buttons on A0
-
-output to radio (remote signal `REM`) is on pin 2
-
-more info:
-http://kovo-blog.blogspot.sk/2013/10/remote-control-audi-radio.html
+More info: http://kovo-blog.blogspot.sk/2013/10/remote-control-audi-radio.html
 
 ## Protocol
 
