@@ -1,4 +1,64 @@
-# VW Radio Remote Control
+# VW Radio Remote Control library for arduino
+
+Moved from this repo (https://github.com/tomaskovacik/arduino/tree/master/VW_radio_remote_control)  to separate repository when it became library.
+
+# Instalation of library
+
+Refer to oficial arduino guide here: https://www.arduino.cc/en/Guide/Libraries
+Download content of repository and extract it into arduino_sketchfolder/library directory.
+
+#How to use it
+
+Example directory has 2 examples, take look at them.
+
+sket must start with 
+
+```
+#include "VAGRadioRemote.h"
+```
+
+define arduino pin which will be connected to "REM" pin of radio
+
+```
+#define REMOTEOUT 2
+```
+
+then initialize library with this line:
+
+```
+VAGRadioRemote remote(REMOTEOUT);
+```
+
+in setup() function include this line for set pin as output:
+
+```
+remote.begi();
+```
+
+and in loop() this functions can be used:
+
+```
+void send(uint8_t _byte); //this send command "_byte" to radio
+void up(); //send predefined code for UP button
+void down(); //send predefined code for DOWN button
+void left(); //send predefined code for LEFT button
+void right(); //send predefined code for RIGHT button
+void volumeUp(); //send predefined code for VOLUME UP  button
+void volumeDown(); //send predefined code for VOLUME DOWN button
+void button(uint8_t buttonNumber); //send predefined code for button defined as "buttonNumber" = 1,2,3,4,5,6.... (memory,cd buttons on front panel of radio)
+void reg(); //send predefined code for REG button - switch between regional and DX radio erceiving mode
+void am(); //send predefined code for AM button
+void as(); //send predefined code for AS button
+void fm(); //send predefined code for FM button
+void random(); //send predefined code for RD button (random)
+//void down_custom(uint8_t _custom_down); //send predefined code for volume button with increment of "_custom_down, probably custom_up exists ... 
+void tp(); //send predefined code for TP button
+void scan(); //send predefined code for SCAN button
+void mode(); //send predefined code for MODE button
+```
+
+
+
 
 Arduino (1.0 and up) stuff related to Audi radios (probably also for VW, Skoda, Seat)
 remote control protocol.  This information is for vehicles where the radio
