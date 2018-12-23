@@ -59,7 +59,7 @@ void mode(); //send predefined code for MODE button
 
 ## Examples
 
-Library icludes two examples, both using ebay LCD shield(2x16) with 5 buttons on A0. Examples use  pin 2 of arduino as output to radio (remote signal `REM`).
+Library includes two examples, both using ebay LCD shield(2x16) with 5 buttons on A0. Examples use  pin 2 of arduino as output to radio (remote signal `REM`).
 
 - code_finder is sketchup for finding all codes understended by my audi concert/chorus 1 radios
 - emulator is sketchup emulating audi MFSW
