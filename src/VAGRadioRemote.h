@@ -124,25 +124,24 @@ public:
 
 VAGRadioRemote(uint8_t pin);
 ~VAGRadioRemote();
-uint8_t begin(); //setup port
-uint8_t send(uint8_t _byte); //send whole packet
-uint8_t up();
-uint8_t down();
-uint8_t left();
-uint8_t right();
-uint8_t volumeUp();
-uint8_t volumeDown();
-uint8_t button(uint8_t buttonNumber);
-uint8_t reg();
-uint8_t am();
-uint8_t as();
-uint8_t fm();
-uint8_t random();
-//uint8_t down_custom(uint8_t _custom_down);
-uint8_t tp();
-uint8_t scan();
-uint8_t mode();
-
+void begin(); //setup port
+void send(uint8_t _byte); //send whole packet
+void up();
+void down();
+void left();
+void right();
+void volumeUp();
+void volumeDown();
+void button(uint8_t buttonNumber);
+void reg();
+void am();
+void as();
+void fm();
+void random();
+//void down_custom(uint8_t _custom_down);
+void tp();
+void scan();
+void mode();
 
 private:
 uint8_t _pin;
@@ -150,4 +149,6 @@ void write_start(); //send initial pulses
 void write(uint8_t _byte); //send single byte
 uint8_t calc_crc(uint8_t byte); //return calculated checksum
 
-}
+};
+
+#endif

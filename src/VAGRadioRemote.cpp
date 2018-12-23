@@ -47,13 +47,13 @@ telephone option:
 
 
 */
-#include "VAGFISReader.h"
+#include "VAGRadioRemote.h"
 #include <Arduino.h>
 
 /**
    Constructor
 */
-VAGRadioRemote::VAGRadioRemote (uint8_t pin){
+VAGRadioRemote::VAGRadioRemote(uint8_t pin){
 	_pin=pin;	
 }
 
@@ -70,7 +70,7 @@ void VAGRadioRemote::begin()
 }
 
 
-uint8_t VAGRadioRemote::send(uint8_t _byte){ //send whole packet
+void VAGRadioRemote::send(uint8_t _byte){ //send whole packet
 	write_start();
 	write(FIRST_BYTE);
 	write(SECOND_BYTE);
@@ -114,69 +114,69 @@ uint8_t VAGRadioRemote::calc_crc(uint8_t _byte){ //return calculated checksum
 return (0xFF-_byte);
 }
 
-uint8_t VAGRadioRemote::up(){
+void VAGRadioRemote::up(){
 	VAGRadioRemote::send(UP);
 }
 
-uint8_t VAGRadioRemote::down(){
+void VAGRadioRemote::down(){
 	VAGRadioRemote::send(DOWN);
 }
 
-uint8_t VAGRadioRemote::left(){
+void VAGRadioRemote::left(){
 	VAGRadioRemote::send(LEFT);
 }
 
-uint8_t VAGRadioRemote::right(){
-	VAGRadioRemote::right(RIGHT);
+void VAGRadioRemote::right(){
+	VAGRadioRemote::send(RIGHT);
 }
 
-uint8_t VAGRadioRemote::volumeUp(){
-        VAGRadioRemote::right(VOLUMEUP);
+void VAGRadioRemote::volumeUp(){
+        VAGRadioRemote::send(VOLUMEUP);
 }
 
-uint8_t VAGRadioRemote::volumeDown(){
-        VAGRadioRemote::right(VOLUMEDOWN);
+void VAGRadioRemote::volumeDown(){
+        VAGRadioRemote::send(VOLUMEDOWN);
 }
 
-uint8_t VAGRadioRemote::button(uint8_t buttonNumber){
-	VAGRadioRemote::right(buttonNumber);
+void VAGRadioRemote::button(uint8_t buttonNumber){
+	VAGRadioRemote::send(buttonNumber);
 }
 
-uint8_t VAGRadioRemote::reg(){
-        VAGRadioRemote::right(REG);
+void VAGRadioRemote::reg(){
+        VAGRadioRemote::send(REG);
 }
 
-uint8_t VAGRadioRemote::am(){
-        VAGRadioRemote::right(AM);
+void VAGRadioRemote::am(){
+        VAGRadioRemote::send(AM);
 }
 
-uint8_t VAGRadioRemote::as(){
-        VAGRadioRemote::right(AS);
+void VAGRadioRemote::as(){
+        VAGRadioRemote::send(AS);
 }
 
-uint8_t VAGRadioRemote::fm(){
-        VAGRadioRemote::right(FM);
+void VAGRadioRemote::fm(){
+        VAGRadioRemote::send(FM);
 }
 
-uint8_t VAGRadioRemote::random(){
-        VAGRadioRemote::right(RANDOM);
+void VAGRadioRemote::random(){
+        VAGRadioRemote::send(RANDOM);
 }
 /*
-uint8_t VAGRadioRemote::down_custom(uint8_t _custom_down){
-        VAGRadioRemote::right(0x80+_custom_down);
+void VAGRadioRemote::down_custom(uint8_t _custom_down){
+        VAGRadioRemote::send(0x80+_custom_down);
 }
 */
 
-uint8_t VAGRadioRemote::tp(){
-	VAGRadioRemote::right(TP);
+void VAGRadioRemote::tp(){
+	VAGRadioRemote::send(TP);
 }
 
-uint8_t VAGRadioRemote::scan(){
-	VAGRadioRemote::right(SCAN);
+void VAGRadioRemote::scan(){
+	VAGRadioRemote::send(SCAN);
 }
 
-uint8_t VAGRadioRemote::mode(){
-	VAGRadioRemote::right(MODE);
+void VAGRadioRemote::mode(){
+	VAGRadioRemote::send(MODE);
 }
 
 
