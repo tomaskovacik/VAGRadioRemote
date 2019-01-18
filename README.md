@@ -127,6 +127,7 @@ these codes:
 | `0x22`    | AM->AM+AS->FM1->FM2->FM1+AS->FM2->AS/in CD mode “RD”         |
 | `0x24`    | AM->AM+AS->FM1->FM2->FM1+AS->FM2->AS/in CD mode “RD”         |
 | `0x26`    | AM->AM+AS->FM1->FM2->FM1+AS->FM2->AS/in CD mode “RD”         |
+| `0x27`    | MEM 1->2->3->4->-5->6                                        |
 | `0x29`    | TP                                                           |
 | `0x2B`    | search up                                                    |
 | `0x3C`    | seek up                                                      |
