@@ -14,10 +14,10 @@ start bit:
  9ms LOW
 4.55ms HIGH
 
- logic 0:
+ logic 1:
 ~600us LOW ~1700us HIGH
 
-logic 1:
+logic 0:
 ~600us LOW ~600us HIGH
 
 stop bit:
@@ -82,16 +82,10 @@ void loop() {
       case 1:
         //increment but dont send
         h++;
-          lcd.clear();
-  lcd.home();
-  lcd.print(h,HEX);
         break;
       case 2:
         //decrement but dont send
         h--; 
-  lcd.clear();
-  lcd.home();
-  lcd.print(h,HEX);
         break;
       case 3:
         // left - decrement and send
@@ -104,6 +98,9 @@ void loop() {
         remote.send(h);
         break;
       }
+  lcd.clear();
+  lcd.home();
+  lcd.print(h,HEX);
 
      }
     }

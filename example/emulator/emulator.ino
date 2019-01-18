@@ -14,10 +14,10 @@ start bit:
  9ms LOW
 4.55ms HIGH
 
- logic 0:
+ logic 1:
 ~600us LOW ~1700us HIGH
 
-logic 1:
+logic 0:
 ~600us LOW ~600us HIGH
 
 stop bit:
