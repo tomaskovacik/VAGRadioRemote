@@ -15,8 +15,8 @@ called `REM` (remote).
 `REM` line is 5V logic, idle state is HIGH (5V)
 
 - start bit:    9ms LOW 4.55ms HIGH
-- logic 0:      ~600us LOW ~1700us HIGH
-- logic 1:      ~600us LOW ~600us HIGH
+- logic 1:      ~600us LOW ~1700us HIGH
+- logic 0:      ~600us LOW ~600us HIGH
 - stop bit:     ~600us LOW
 
 The MFSW controller always sends a packet of 4 bytes to the radio.  It
@@ -115,7 +115,7 @@ telephone option:
 //#define 0xE6 	seek up
 
 #define FIRST_BYTE 0x41
-#define SECOND_BYTE 0x48
+#define SECOND_BYTE 0xE8
 #define CRC(x) (0xFF-x)
  
 class VAGRadioRemote
@@ -145,7 +145,8 @@ void mode();
 
 private:
 uint8_t _pin;
-void write_start(); //send initial pulses
+void writeStart(); //send initial pulses
+void writeStop(); //send initial pulses
 void write(uint8_t _byte); //send single byte
 uint8_t calc_crc(uint8_t byte); //return calculated checksum
 

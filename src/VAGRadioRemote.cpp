@@ -15,8 +15,8 @@ called `REM` (remote).
 `REM` line is 5V logic, idle state is HIGH (5V)
 
 - start bit:    9ms LOW 4.55ms HIGH
-- logic 0:      ~600us LOW ~1700us HIGH
-- logic 1:      ~600us LOW ~600us HIGH
+- logic 1:      ~600us LOW ~1700us HIGH
+- logic 0:      ~600us LOW ~600us HIGH
 - stop bit:     ~600us LOW
 
 The MFSW controller always sends a packet of 4 bytes to the radio.  It
@@ -71,14 +71,15 @@ void VAGRadioRemote::begin()
 
 
 void VAGRadioRemote::send(uint8_t _byte){ //send whole packet
-	write_start();
+	writeStart();
 	write(FIRST_BYTE);
 	write(SECOND_BYTE);
 	write(_byte);
 	write(calc_crc(_byte));
+	writeStop();
 }
 
-void VAGRadioRemote::write_start(){ //send initial pulses
+void VAGRadioRemote::writeStart(){ //send initial pulses
 //- start bit:    9ms LOW 4.55ms HIGH
 //pin is at high already
 
@@ -86,7 +87,7 @@ void VAGRadioRemote::write_start(){ //send initial pulses
 	delay(9);
 	digitalWrite(_pin,HIGH);
 	delay(4);
-	delayMicroseconds(550);
+	delayMicroseconds(500);
 }
 
 void VAGRadioRemote::write(uint8_t _byte){ //send single byte
@@ -100,10 +101,13 @@ void VAGRadioRemote::write(uint8_t _byte){ //send single byte
 	    delayMicroseconds(600);
 	    digitalWrite(_pin,HIGH);
 	    if (!!(_byte & (1 << (7 - i))))
-	      delayMicroseconds(600);
-	    else
 	      delayMicroseconds(1700);
+	    else
+	      delayMicroseconds(600);
   	}
+}
+
+void VAGRadioRemote::writeStop(){
 	digitalWrite(_pin,LOW);
 	delayMicroseconds(600);
 	digitalWrite(_pin,HIGH);
