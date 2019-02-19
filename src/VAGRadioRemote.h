@@ -47,8 +47,8 @@ telephone option:
 
 
 */
-#ifndef VAGFISReader_h
-#define VAGFISReader_h
+#ifndef VAGRadioRemote_h
+#define VAGRadioRemote_h
 #include <inttypes.h>
 #include <Arduino.h>
 
