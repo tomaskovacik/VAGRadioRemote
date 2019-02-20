@@ -58,7 +58,7 @@ telephone option:
 #define BTN3 0x03 //	mem/cd3
 #define BTN4 0x04 //	madeup: mem/cd4
 #define BTN5 0x05 //	mm/cd5
-#define BTN5 0x06 //	madeup: mem/cd6
+#define BTN6 0x06 //	madeup: mem/cd6
 #define UP 0x07 //	search up
 #define REG 0x09 //	reg on/off
 //#define TP 0x0B //	tp
