@@ -56,7 +56,7 @@ telephone option:
 #define BTN1 0x01    //	mem/cd1
 #define BTN2 0x02    //	I just made this up: mem/cd2
 #define BTN3 0x03 //	mem/cd3
-#define BTN3 0x04 //	madeup: mem/cd4
+#define BTN4 0x04 //	madeup: mem/cd4
 #define BTN5 0x05 //	mm/cd5
 #define BTN5 0x06 //	madeup: mem/cd6
 #define UP 0x07 //	search up
