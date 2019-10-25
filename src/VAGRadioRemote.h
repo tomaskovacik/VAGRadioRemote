@@ -137,7 +137,7 @@ telephone option:
 //#define 0x52 	Seek down/FR
 //#define 0x54 	Seek down/FR
 //#define 0x56 	Seek down/FR
-//#define 0x60 	Seek down/FR
+#define CDDOWN 0x60 // 	Seek down // down in CD mode
 //#define 0x62 	seek down
 //#define 0x64 	seek down
 #define VOLUMEUP 0x80// 	Volume up
@@ -165,7 +165,7 @@ telephone option:
 //#define 0xD2 	Seek up/FF
 //#define 0xD4 	Seek up/FF
 //#define 0xD6 	Seek up/FF
-//#define 0xE0 	seek up
+#define CDUP 0xE0 //	seek up //up in CD mode
 //#define 0xE2 	seek up
 //#define 0xE4 	seek up
 //#define 0xE6 	seek up
@@ -185,7 +185,9 @@ void begin(); //setup port
 
 void send(uint8_t _byte); //send whole packet
 void up();
+void cdUp();
 void down();
+void cdDown();
 void left();
 void right();
 void volumeUp();

@@ -462,9 +462,19 @@ void VAGRadioRemote::up(){
 	VAGRadioRemote::send(UP);
 }
 
+void VAGRadioRemote::cdUp(){
+        VAGRadioRemote::send(CDUP);
+}
+
+
 void VAGRadioRemote::down(){
 	VAGRadioRemote::send(DOWN);
 }
+
+void VAGRadioRemote::cdDown(){
+        VAGRadioRemote::send(CDDOWN);
+}
+
 
 void VAGRadioRemote::left(){
 	VAGRadioRemote::send(LEFT);
