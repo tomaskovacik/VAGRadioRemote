@@ -3,8 +3,64 @@
   https://github.com/tomaskovacik/
   GNU GPL3
 
-arduino library fo V.A.G. radio remote control protocol.  This information is for vehicles where the radio
-does not use CAN bus.
+arduino library fo V.A.G. radio remote control protocol, for reading and writing.
+
+this library use hardcoded timer2! it is not dependant on any of it features, any timer can be used
+input pit has to have hardware interrupt (INTx)
+
+====================== reading example:
+#include <VAGRadioRemote.h>
+
+#define REMOTE_PIN 2
+
+VAGRadioRemote remote(NULL, REMOTE_PIN);
+
+void setup() {
+  remote.begin();
+  Serial.begin(115200);
+}
+
+void loop() {
+ if (remote.gotNewCode()) {
+    Serial.println(remote.decodeRemote(remote.newCode()));
+    remote.clearGotNewCode();
+  }
+}
+=====================
+
+===================== writing example on diferent device of corse
+#include <VAGRadioRemote.h>
+
+#define REMOTE_PIN 2 // this has to have hardware interrupt!
+
+long last_update = 0;
+
+VAGRadioRemote remote(REMOTE_PIN,NULL);
+
+
+int h = 0x00;
+
+void setup() {
+  remote.begin();
+  Serial.begin(115200);
+}
+
+void loop() {
+  if (Serial.available() > 0)
+  {
+    // read the incoming byte:
+    char c = Serial.read();
+    switch (c)
+    {
+      case 'm': //mode
+        remote.mode();
+.
+.
+.
+.
+
+===================
+
 
 ## Protocol
 
@@ -14,10 +70,10 @@ called `REM` (remote).
 
 `REM` line is 5V logic, idle state is HIGH (5V)
 
-- start bit:    9ms LOW 4.55ms HIGH
-- logic 1:      ~600us LOW ~1700us HIGH
-- logic 0:      ~600us LOW ~600us HIGH
-- stop bit:     ~600us LOW
+- start bit:    ~9000us LOW ~4550us HIGH
+- logic 1:       ~600us LOW ~1700us HIGH 
+- logic 0:       ~600us LOW ~600us HIGH
+- stop bit:      ~600us LOW
 
 The MFSW controller always sends a packet of 4 bytes to the radio.  It
 consists of 2 unknown header bytes, followed by a code byte, and finally
@@ -59,7 +115,7 @@ telephone option:
 #define BTN4 0x04 //	madeup: mem/cd4
 #define BTN5 0x05 //	mm/cd5
 #define BTN6 0x06 //	madeup: mem/cd6
-#define UP 0x07 //	search up
+//#define UP 0x07 //	search up
 #define REG 0x09 //	reg on/off
 //#define TP 0x0B //	tp
 #define AM 0x11 //	AM
@@ -117,14 +173,16 @@ telephone option:
 #define FIRST_BYTE 0x41
 #define SECOND_BYTE 0xE8
 #define CRC(x) (0xFF-x)
- 
+#define SENDPOINTERTOP 67
+
 class VAGRadioRemote
 {
 public:
 
-VAGRadioRemote(uint8_t pin);
+VAGRadioRemote(uint8_t outpin, uint8_t inpin);
 ~VAGRadioRemote();
 void begin(); //setup port
+
 void send(uint8_t _byte); //send whole packet
 void up();
 void down();
@@ -142,13 +200,15 @@ void random();
 void tp();
 void scan();
 void mode();
+uint8_t gotNewCode();
+uint8_t newCode();
+void clearGotNewCode();
+static uint8_t bitLenght(uint8_t _byte,uint8_t _bit);
 
-private:
-uint8_t _pin;
-void writeStart(); //send initial pulses
-void writeStop(); //send initial pulses
-void write(uint8_t _byte); //send single byte
-uint8_t calc_crc(uint8_t byte); //return calculated checksum
+String decodeRemote(uint8_t code);
+String decodeRemote();
+static void remoteInGoingHigh();
+static void remoteInGoingLow();
 
 };
 
