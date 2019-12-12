@@ -109,12 +109,12 @@ telephone option:
 #include "VAGRadioRemote.h"
 #include <Arduino.h>
 
-//#define USE_TIMER0
+#define USE_TIMER0
 //#define USE_TIMER1
 //#define USE_TIMER2
 //#define USE_TIMER3
 //#define USE_TIMER4
-#define USE_TIMER5
+//#define USE_TIMER5
 
 volatile static uint8_t data[2];
 volatile static uint8_t sendPtr=0;// 67 is stop => 9000ms,4500ms,4x8x2 + stopbit
@@ -159,7 +159,7 @@ void VAGRadioRemote::setTimer(void){
   TCCR0B = 0x00; // Normal port operation, OC0 disconnected
   TCCR0A |= _BV(WGM01); // CTC mode
   TCCR0B |= _BV(CS01);// prescaler = 8 -> 1 timer clock tick is 0.5us long @ 16Mhz
-  OCR0A = 50;//run compare rutine every 5us, 0.5x10
+  OCR0A = 100;//run compare rutine every 25us, 0.5x50
   TCNT0 = 0;
   TIMSK0 |= _BV(OCIE0A); // enable output compare interrupt A on timer0
 }
@@ -173,7 +173,7 @@ void VAGRadioRemote::setTimer(void){
   TCCR1B = 0x00; // Normal port operation, OC0 disconnected
   TCCR1B |= _BV(WGM12); // CTC mode
   TCCR1B |= _BV(CS11);// prescaler = 8 -> 1 timer clock tick is 0.5us long @ 16Mhz
-  OCR1A = 50;//run compare rutine every 5us, 0.5x10
+  OCR1A = 100;//run compare rutine every 50us, 0.5x100
   TCNT1 = 0;
   TIMSK1 |= _BV(OCIE1A); // enable output compare interrupt A on timer0
 }
@@ -187,7 +187,7 @@ void VAGRadioRemote::setTimer(void){
   TCCR2B = 0x00; // Normal port operation, OC0 disconnected
   TCCR2A |= _BV(WGM21); // CTC mode
   TCCR2B |= _BV(CS21);// prescaler = 8 -> 1 timer clock tick is 0.5us long @ 16Mhz
-  OCR2A = 50;//run compare rutine every 5us, 0.5x10
+  OCR2A = 100;//run compare rutine every 50us, 0.5x100
   TCNT2 = 0;
   TIMSK2 |= _BV(OCIE2A); // enable output compare interrupt A on timer0
 }
@@ -201,7 +201,7 @@ void VAGRadioRemote::setTimer(void){
   TCCR3B = 0x00; // Normal port operation, OC0 disconnected
   TCCR3B |= _BV(WGM32); // CTC mode
   TCCR3B |= _BV(CS31);// prescaler = 8 -> 1 timer clock tick is 0.5us long @ 16Mhz
-  OCR3A = 50;//run compare rutine every 5us, 0.5x10
+  OCR3A = 100;//run compare rutine every 50us, 0.5x100
   TCNT3 = 0;
   TIMSK3 |= _BV(OCIE3A); // enable output compare interrupt A on timer0
 }
@@ -215,7 +215,7 @@ void VAGRadioRemote::setTimer(void){
   TCCR4B = 0x00; // Normal port operation, OC0 disconnected
   TCCR4B |= _BV(WGM42); // CTC mode
   TCCR4B |= _BV(CS41);// prescaler = 8 -> 1 timer clock tick is 0.5us long @ 16Mhz
-  OCR4A = 50;//run compare rutine every 5us, 0.5x10
+  OCR4A = 100;//run compare rutine every 50us, 0.5x100
   TCNT4 = 0;
   TIMSK4 |= _BV(OCIE4A); // enable output compare interrupt A on timer0
 }
@@ -229,7 +229,7 @@ void VAGRadioRemote::setTimer(void){
   TCCR5B = 0x00; // Normal port operation, OC0 disconnected
   TCCR5B |= _BV(WGM52); // CTC mode
   TCCR5B |= _BV(CS51);// prescaler = 8 -> 1 timer clock tick is 0.5us long @ 16Mhz
-  OCR5A = 50;//run compare rutine every 5us, 0.5x10
+  OCR5A = 100;//run compare rutine every 50us, 0.5x100
   TCNT5 = 0;
   TIMSK5 |= _BV(OCIE5A); // enable output compare interrupt A on timer0
 }
@@ -248,7 +248,7 @@ void VAGRadioRemote::begin()
 	pinMode(_inpin, INPUT_PULLUP);
 	attachInterrupt(digitalPinToInterrupt(_inpin), &VAGRadioRemote::remoteInGoingLow, FALLING);
 #endif
-	setTimer();
+	VAGRadioRemote::setTimer();
 }
 
 ISR(__TIMERX_COMPA_vect)
@@ -259,7 +259,7 @@ ISR(__TIMERX_COMPA_vect)
     captime++;
   }
 
-  if (captime == 600 ) { //300x20us =>  6ms high pulse,
+  if (captime == 120 ) { //300x20us =>  6ms high pulse,
     captime = capptr = captureEnabled = 0;
     attachInterrupt(digitalPinToInterrupt(_inpin), &VAGRadioRemote::remoteInGoingLow, FALLING);
   }
@@ -272,11 +272,11 @@ if (sendPtr>0 && counter == 0)
 	{
 		case 67: //start bit, 9000us low
 			digitalWrite(_outpin,LOW); //made pin LOW
-			counter=90;//count form 90 to 0 for 9000us
+			counter=176;//count form 186 to 0 for ~9000us
 		break;
 		case 66: //start bit, 4500us high
 			digitalWrite(_outpin,HIGH);
-			counter=45;
+			counter=87;
 		break;
 		//regular start of bit, 600us low
 		case 65:
@@ -313,7 +313,7 @@ if (sendPtr>0 && counter == 0)
 		case 3:
 		case 1:
 			digitalWrite(_outpin,LOW); //made pin LOW
-			counter=6; //each bit start with 600us low
+			counter=11; //each bit start with 600us low
 		break;
 		//0x41 and 0xE8 data
 		case 64://zeroes
@@ -327,7 +327,7 @@ if (sendPtr>0 && counter == 0)
 		case 36:
 		case 34:
 			digitalWrite(_outpin,HIGH);
-			counter=6;
+			counter=11;
 		break;
 		case 62://ones
 		case 50:
@@ -336,7 +336,7 @@ if (sendPtr>0 && counter == 0)
 		case 44:
 		case 40:
 			digitalWrite(_outpin,HIGH);
-			counter=17;
+			counter=33;
 		break;
 		case 32:
 			counter=VAGRadioRemote::bitLenght(data[0],7);
@@ -405,9 +405,9 @@ if (sendPtr == 0 && counter == 0)
 uint8_t VAGRadioRemote::bitLenght(uint8_t _byte,uint8_t _bit){
 	digitalWrite(_outpin,HIGH);
 	if (!!(_byte & (1 << _bit)))
-		return 17;
+		return 33;
 	else
-		return 6;
+		return 11;
 }
 
 void VAGRadioRemote::send(uint8_t _byte){ //send whole packet
@@ -430,17 +430,17 @@ void VAGRadioRemote::remoteInGoingLow() {
   if (captureEnabled) {
     //we have ticked in some data, lets calculate what we capture
     captureEnabled = 0; //disable future counting in timer2
-    if (captime > 35) {//start bit 4.55ms 200x20
+    if (captime > 89) {//start bit 4.55ms 89x50us=4450
 
       capbit = capptr = 0; //start of packet, lets reset it all to begining
       capbyte[0] = capbyte[1] = capbyte[2] = capbyte[3] = 0;
 
     } else {
 
-      if (captime > 2) { //logic 0 is 600us pulse
+      if (captime > 10) { //logic 0 is 600us pulse, 50x10=500us
         capbyte[capptr] <<= 1;
       }
-      if (captime > 7) {
+      if (captime > 32) { //32*50us , more then 1600us
         capbyte[capptr] |= 1;
       }
       capbit++;

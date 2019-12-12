@@ -211,7 +211,8 @@ String decodeRemote(uint8_t code);
 String decodeRemote();
 static void remoteInGoingHigh();
 static void remoteInGoingLow();
-
+private:
+void setTimer(void);
 };
 
 #endif
