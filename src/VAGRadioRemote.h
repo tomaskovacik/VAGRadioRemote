@@ -3,7 +3,7 @@
   https://github.com/tomaskovacik/
   GNU GPL3
 
-arduino library fo V.A.G. radio remote control protocol, for reading and writing.
+arduino library for V.A.G. radio remote control protocol, for reading and writing.
 
 this library use hardcoded timer2! it is not dependant on any of it features, any timer can be used
 input pit has to have hardware interrupt (INTx)

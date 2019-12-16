@@ -3,7 +3,7 @@
   https://github.com/tomaskovacik/
   GNU GPL3
 
-arduino library fo V.A.G. radio remote control protocol, for reading and writing.
+arduino library for V.A.G. radio remote control protocol, for reading and writing.
 
 this library use hardcoded timer2! it is not dependant on any of it features, any timer can be used
 input pit has to have hardware interrupt (INTx)
@@ -259,7 +259,7 @@ ISR(__TIMERX_COMPA_vect)
     captime++;
   }
 
-  if (captime == 120 ) { //300x20us =>  6ms high pulse,
+  if (captime == 120 ) { //120x50us =>  6ms high pulse,
     captime = capptr = captureEnabled = 0;
     attachInterrupt(digitalPinToInterrupt(_inpin), &VAGRadioRemote::remoteInGoingLow, FALLING);
   }
