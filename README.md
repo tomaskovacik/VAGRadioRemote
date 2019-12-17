@@ -9,9 +9,9 @@ Download content of repository and extract it into arduinoSketchFolder/library d
 
 ## How to use it
 
-Example directory has 2 examples, take look at them.
+Example directory has 2 examples, take a look at them.
 
-sket must start with 
+sketch must start with 
 
 ```
 #include "VAGRadioRemote.h"
