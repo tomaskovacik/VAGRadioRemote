@@ -103,10 +103,10 @@ discovered codes on my audi concert I unit:
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 VAGRadioRemote remote(REMOTE_PIN);
 
-int adc_key_val[5] ={
+unsigned int adc_key_val[5] ={
   30, 150, 360, 535, 760 };
 int NUM_KEYS = 5;
-int adc_key_in;
+unsigned int adc_key_in;
 int key=-1;
 int oldkey=-1;
 
