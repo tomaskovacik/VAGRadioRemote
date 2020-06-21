@@ -9,7 +9,7 @@ Download content of repository and extract it into arduinoSketchFolder/library d
 
 ## How to use it
 
-Example directory has 2 examples, take a look at them.
+Example directory has 5 examples, take a look at them.
 
 sketch must start with 
 
@@ -17,16 +17,21 @@ sketch must start with
 #include "VAGRadioRemote.h"
 ```
 
-define arduino pin which will be connected to "REM" pin of radio
+define arduino pin which will be connected to "REM" pin of radio and/or pin for input from remote control to read pressed button
+input pin must have hardware input capability
 
 ```
 #define REMOTEOUT 2
+#define REMOTEIN 3
 ```
 
 then initialize library with this line:
 
 ```
-VAGRadioRemote remote(REMOTEOUT);
+VAGRadioRemote remote(REMOTEOUT); //only output
+VAGRadioRemote remote(REMOTEOUT,-1); //only output
+VAGRadioRemote remote(REMOTEOUT,REMOTEIN);  //for both input and output
+VAGRadioRemote remote(-1,REMOTEIN);  //only input
 ```
 
 in setup() function include this line for set pin as output:
@@ -55,14 +60,22 @@ void random(); //send predefined code for RD button (random)
 void tp(); //send predefined code for TP button
 void scan(); //send predefined code for SCAN button
 void mode(); //send predefined code for MODE button
+uint8_t gotNewCode(); //return true if we have new code read from input
+uint8_t newCode(); //return new code
+void clearGotNewCode(); //clear flag that we have new code red
+String decodeRemote(uint8_t code); //get meaning of code in human readable format
+String decodeRemote(); //get meaning of newCode in human readable format
 ```
 
 ## Examples
 
-Library includes two examples, both using ebay LCD shield(2x16) with 5 buttons on A0. Examples use  pin 2 of arduino as output to radio (remote signal `REM`).
+Library includes 5 examples, both using ebay LCD shield(2x16) with 5 buttons on A0. Examples use  pin 2 of arduino as output to radio (remote signal `REM`).
 
 - code_finder is sketchup for finding all codes understended by my audi concert/chorus 1 radios
 - emulator is sketchup emulating audi MFSW
+- Radio_remote_over_serial - serial to remote control protocol example
+- Radio_remote_read_and_write - read remote control and send it to another pin of arduino 
+- Radio_remote_read_to_serial - read remote control and write to serial what button was pressed in human readable form
 
 More info: http://kovo-blog.blogspot.sk/2013/10/remote-control-audi-radio.html
 
