@@ -113,13 +113,11 @@
 
 long last_update = 0;
 
-VAGRadioRemote remote(REMOTE_PIN,NULL);
+VAGRadioRemote remote(REMOTE_PIN,-1);
 
 void setup() {
   remote.begin();
-
   Serial.begin(115200);
-
 }
 
 void loop() {

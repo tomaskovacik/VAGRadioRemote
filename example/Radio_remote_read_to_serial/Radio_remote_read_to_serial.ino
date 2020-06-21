@@ -119,7 +119,7 @@
 
 #define REMOTE_PIN 2
 
-VAGRadioRemote remote(NULL, REMOTE_PIN);
+VAGRadioRemote remote(-1, REMOTE_PIN);
 
 void setup() {
 
