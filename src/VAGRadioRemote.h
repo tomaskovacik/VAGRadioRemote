@@ -176,7 +176,7 @@ class VAGRadioRemote
 {
 public:
 
-VAGRadioRemote(uint8_t outpin, uint8_t inpin);
+VAGRadioRemote(uint8_t outpin, uint8_t inpin=NULL);
 ~VAGRadioRemote();
 void begin(); //setup port
 
