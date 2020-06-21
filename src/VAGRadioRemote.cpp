@@ -134,13 +134,14 @@ static volatile uint8_t _newCode = 0;
    Constructor
 */
 
-VAGRadioRemote::VAGRadioRemote(uint8_t outpin,uint8_t inpin){
-if (outpin != NULL){
+VAGRadioRemote::VAGRadioRemote(int8_t outpin,int8_t inpin)
+{
+if (outpin != -1){
 		#define _OUTPUT
         	_outpin = outpin;
 }
 
-if (inpin != NULL){
+if (inpin != -1){
 		#define _INPUT
 		_inpin = inpin;
 }
