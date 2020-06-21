@@ -6,7 +6,7 @@
 arduino library for V.A.G. radio remote control protocol, for reading and writing.
 
 this library use hardcoded timer2! it is not dependant on any of it features, any timer can be used
-input pit has to have hardware interrupt (INTx)
+input pin must have hardware interrupt (INTx), output pin must not be input only of corse
 
 ====================== reading example:
 #include <VAGRadioRemote.h>
@@ -109,9 +109,9 @@ telephone option:
 #include "VAGRadioRemote.h"
 #include <Arduino.h>
 
-#define USE_TIMER0
+//#define USE_TIMER0
 //#define USE_TIMER1
-//#define USE_TIMER2
+#define USE_TIMER2
 //#define USE_TIMER3
 //#define USE_TIMER4
 //#define USE_TIMER5

@@ -6,7 +6,7 @@
 arduino library for V.A.G. radio remote control protocol, for reading and writing.
 
 this library use hardcoded timer2! it is not dependant on any of it features, any timer can be used
-input pit has to have hardware interrupt (INTx)
+input pin must have hardware interrupt (INTx), , output pin must not be input only of corse
 
 ====================== reading example:
 #include <VAGRadioRemote.h>
@@ -37,9 +37,6 @@ long last_update = 0;
 
 VAGRadioRemote remote(REMOTE_PIN,NULL);
 
-
-int h = 0x00;
-
 void setup() {
   remote.begin();
   Serial.begin(115200);
@@ -65,8 +62,8 @@ void loop() {
 ## Protocol
 
 On vehicles where the radio does not use CAN bus, the MFSW (Multifunction
-Steering Wheel) controller talks to the radio using only 1 wire, which is
-called `REM` (remote).
+Steering Wheel) controller talks to the radio using only 1 wire(sort of , second one is ground)
+, which is called `REM` (remote).
 
 `REM` line is 5V logic, idle state is HIGH (5V)
 
