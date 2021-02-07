@@ -69,7 +69,7 @@ String decodeRemote(); //get meaning of newCode in human readable format
 
 ## Examples
 
-Library includes 5 examples, both using ebay LCD shield(2x16) with 5 buttons on A0. Examples use  pin 2 of arduino as output to radio (remote signal `REM`).
+Library includes 5 examples, code_finder and emulator are using ebay LCD shield(2x16) with 5 buttons on A0. Examples use  pin 2 of arduino as output to radio (remote signal `REM`).
 
 - code_finder is sketchup for finding all codes understended by my audi concert/chorus 1 radios
 - emulator is sketchup emulating audi MFSW
