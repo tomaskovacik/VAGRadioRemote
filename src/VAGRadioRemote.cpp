@@ -482,6 +482,7 @@ String VAGRadioRemote::decodeRemote(uint8_t code) {
     case BTN4: return F("mem/cd4");//Did not work on my audi concert ...
     case BTN5: return F("mem/cd5");
     case BTN6: return F("mem/cd6");//Did not work on my audi concert ...
+    case VW_TOGGLE_MODE: return F("Toggle Mode");
     case REG: return F("radio regional on/off");
     case AM: return F("AM");
     case AS: return F("AS-STORE");
@@ -490,7 +491,9 @@ String VAGRadioRemote::decodeRemote(uint8_t code) {
     case LEFT:
     case 0x42:
     case 0x44:
+    case VW_LEFT: return F("Left FM1/FM2/AM 6-5-4-3-2-1 | CD/SD - Folder Down");
     case 0x46: return F("LEFT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1");
+    case VW_RIGHT: return F("Right FM1/FM2/AM 1-2-3-4-5-5 | CD/SD - Folder Up");
     case DOWN:
     case 0x52:
     case 0x54:
@@ -505,6 +508,7 @@ String VAGRadioRemote::decodeRemote(uint8_t code) {
     case 0x84:
     case 0x85:
     case 0x86: return F("Volume up");
+    case VW_VOICE_DIAL: return F("Voice Dail");
     case DOWN_2: return F("-2 Volume down bas/treble down/fade rear/bal left");
     case DOWN_4: return F("-4 Volume down bas/treble down/fade rear/bal left");
     case DOWN_6: return F("-6 Volume down bas/treble down/fade rear/bal left");
