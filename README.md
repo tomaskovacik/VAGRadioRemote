@@ -37,7 +37,7 @@ VAGRadioRemote remote(-1,REMOTEIN);  //only input
 in setup() function include this line for set pin as output:
 
 ```
-remote.begi();
+remote.begin();
 ```
 
 and in loop() this functions can be used:
