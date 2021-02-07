@@ -113,6 +113,7 @@ telephone option:
 #define BTN5 0x05 //	mm/cd5
 #define BTN6 0x06 //	madeup: mem/cd6
 //#define UP 0x07 //	search up
+#define VW_TOGGLE_MODE 0x08 //Toggle Mode, user submitted
 #define REG 0x09 //	reg on/off
 //#define TP 0x0B //	tp
 #define AM 0x11 //	AM
@@ -129,7 +130,9 @@ telephone option:
 #define LEFT 0x40// 	LEFT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1
 //#define 0x42 	LEFT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1
 //#define 0x44 	LEFT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1
+#define VW_LEFT 0x45 // Left FM1/FM2/AM 6-5-4-3-2-1 | CD/SD - Folder Down, user submitted
 //#define 0x46 	LEFT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1
+#define VW_RIGHT 0x4D // Left FM1/FM2/AM 1-2-3-4-5-5 | CD/SD - Folder Up
 #define DOWN 0x50 //	Seek down/FR
 //#define 0x52 	Seek down/FR
 //#define 0x54 	Seek down/FR
@@ -144,6 +147,7 @@ telephone option:
 //#define 0x84 	Volume up
 //#define 0x85 	Volume up
 //#define 0x86 	Volume up
+#define VW_VOICE_DIAL 0x88 // Voice Dail
 #define DOWN_2 0x89// 	-2 Volume down bas/treble down/fade rear/bal left
 #define DOWN_4 0x8B// 	-4 Volume down bas/treble down/fade rear/bal left
 #define DOWN_6 0x8D// 	-6 Volume down bas/treble down/fade rear/bal left
