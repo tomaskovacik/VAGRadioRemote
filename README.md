@@ -2,6 +2,15 @@
 
 Moved from this repo (https://github.com/tomaskovacik/arduino/tree/master/VW_radio_remote_control)  to separate repository when it became library.
 
+later I realized that this protocol is inverted standard NEC IR remote protocol with 16bit address
+
+https://www.sbprojects.net/knowledge/ir/nec.php
+
+this library should also works, but I did not test it, do not forget you need invert it (standard NEC start with 9ms HIGH pulse followed with 4.5ms low pulse, while VAG start with 9ms low folowed by 4.5ms high etc ...)
+
+also NEC protocol use LSB first while my implementation use MSF first, maybe I will change it in future
+
+
 ## Instalation of library
 
 Refer to oficial arduino guide here: https://www.arduino.cc/en/Guide/Libraries
