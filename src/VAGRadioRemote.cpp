@@ -273,11 +273,11 @@ if (sendPtr>0 && counter == 0)
 	{
 		case 67: //start bit, 9000us low
 			digitalWrite(_outpin,LOW); //made pin LOW
-			counter=176;//count form 186 to 0 for ~9000us
+			counter=177;//count form 186 to 0 for ~9000us
 		break;
 		case 66: //start bit, 4500us high
 			digitalWrite(_outpin,HIGH);
-			counter=87;
+			counter=89;
 		break;
 		//regular start of bit, 600us low
 		case 65:
@@ -431,8 +431,7 @@ void VAGRadioRemote::remoteInGoingLow() {
   if (captureEnabled) {
     //we have ticked in some data, lets calculate what we capture
     captureEnabled = 0; //disable future counting in timer2
-    if (captime > 89) {//start bit 4.55ms 89x50us=4450
-
+    if (captime > 85) {//start bit 4.55ms 85x50us=4250
       capbit = capptr = 0; //start of packet, lets reset it all to begining
       capbyte[0] = capbyte[1] = capbyte[2] = capbyte[3] = 0;
 
