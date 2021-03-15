@@ -160,7 +160,7 @@ void VAGRadioRemote::setTimer(void){
   TCCR0B = 0x00; // Normal port operation, OC0 disconnected
   TCCR0A |= _BV(WGM01); // CTC mode
   TCCR0B |= _BV(CS01);// prescaler = 8 -> 1 timer clock tick is 0.5us long @ 16Mhz
-  OCR0A = 100;//run compare rutine every 25us, 0.5x50
+  OCR0A = 100;//run compare rutine every 50us, 0.5x100
   TCNT0 = 0;
   TIMSK0 |= _BV(OCIE0A); // enable output compare interrupt A on timer0
 }
