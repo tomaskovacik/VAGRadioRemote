@@ -81,13 +81,13 @@ The MFSW controller always sends a packet of 4 bytes to the radio.  It
 consists of 2 unknown header bytes, followed by a code byte, and finally
 a checksum byte:
 
-    0x41 0xE8 <code> <checksum>
+    0x82 0x17 <code> <checksum>
 
 The checksum is `0xFF - code`.  Example:
 
-    0x41 0xE8 0xD0 0x2F
+    0x82 0x17 0x0B 0xF4
 
-Code byte: `0xD0`, Checksum: `0xFF - 0xD0 = 0x2F`.
+Code byte: `0x0B`, Checksum: `0xFF - 0x0B = 0xF4`.
 
 ## MFSW
 
@@ -96,12 +96,12 @@ telephone option:
 
 | Steering Wheel Button | Code      | Complete Packet       |
 | --------------------- | --------- | --------------------- |
-| UP                    | `0xD0`    | `0x41 0xE8 0xD0 0x2F` |
-| DOWN                  | `0x50`    | `0x41 0xE8 0x50 0xAF` |
-| LEFT                  | `0x40`    | `0x41 0xE8 0x40 0xBF` |
-| RIGHT                 | `0xC0`    | `0x41 0xE8 0xC0 0x3F` |
-| VOL+                  | `0x80`    | `0x41 0xE8 0x80 0x7F` |
-| VOL-                  | `0x00`    | `0x41 0xE8 0x00 0xFF` |
+| UP                    | `0x0B`    | `0x82 0x17 0x0B 0xF4` |
+| DOWN                  | `0x0A`    | `0x82 0x17 0x0A 0xF5` |
+| LEFT                  | `0x02`    | `0x82 0x17 0x02 0xFD` |
+| RIGHT                 | `0x03`    | `0x82 0x17 0x03 0xFC` |
+| VOL+                  | `0x01`    | `0x82 0x17 0x01 0xFE` |
+| VOL-                  | `0x00`    | `0x82 0x17 0x00 0xFF` |
 
 
 */
@@ -334,52 +334,52 @@ if (sendPtr>0 && counter == 0)
 			counter=33;
 		break;
 		case 32:
-			counter=VAGRadioRemote::bitLenght(data[0],7);
+			counter=VAGRadioRemote::bitLenght(data[0],0);
 		break;
 		case 30:
-			counter=VAGRadioRemote::bitLenght(data[0],6);
+			counter=VAGRadioRemote::bitLenght(data[0],1);
 		break;
         	case 28:
-	                counter=VAGRadioRemote::bitLenght(data[0],5);
+	                counter=VAGRadioRemote::bitLenght(data[0],2);
         	break;
 		case 26:
-                	counter=VAGRadioRemote::bitLenght(data[0],4);
-	        break;
-        	case 24:
                 	counter=VAGRadioRemote::bitLenght(data[0],3);
 	        break;
+        	case 24:
+                	counter=VAGRadioRemote::bitLenght(data[0],4);
+	        break;
         	case 22:
-                	counter=VAGRadioRemote::bitLenght(data[0],2);
+                	counter=VAGRadioRemote::bitLenght(data[0],5);
 	        break;
         	case 20:
-                	counter=VAGRadioRemote::bitLenght(data[0],1);
+                	counter=VAGRadioRemote::bitLenght(data[0],6);
 	        break;
         	case 18:
-                	counter=VAGRadioRemote::bitLenght(data[0],0);
+                	counter=VAGRadioRemote::bitLenght(data[0],7);
 	        break;
         	case 16:
-                	counter=VAGRadioRemote::bitLenght(data[1],7);
+                	counter=VAGRadioRemote::bitLenght(data[1],0);
 	        break;
         	case 14:
-                	counter=VAGRadioRemote::bitLenght(data[1],6);
-	        break;
-        	case 12:
-                	counter=VAGRadioRemote::bitLenght(data[1],5);
-	        break;
-        	case 10:
-                	counter=VAGRadioRemote::bitLenght(data[1],4);
-	        break;
-        	case 8:
-                	counter=VAGRadioRemote::bitLenght(data[1],3);
-	        break;
-        	case 6:
-                	counter=VAGRadioRemote::bitLenght(data[1],2);
-	        break;
-        	case 4:
                 	counter=VAGRadioRemote::bitLenght(data[1],1);
 	        break;
+        	case 12:
+                	counter=VAGRadioRemote::bitLenght(data[1],2);
+	        break;
+        	case 10:
+                	counter=VAGRadioRemote::bitLenght(data[1],3);
+	        break;
+        	case 8:
+                	counter=VAGRadioRemote::bitLenght(data[1],4);
+	        break;
+        	case 6:
+                	counter=VAGRadioRemote::bitLenght(data[1],5);
+	        break;
+        	case 4:
+                	counter=VAGRadioRemote::bitLenght(data[1],6);
+	        break;
         	case 2:
-                	counter=VAGRadioRemote::bitLenght(data[1],0);
+                	counter=VAGRadioRemote::bitLenght(data[1],7);
 	        break;
 	}
 		
@@ -433,10 +433,10 @@ void VAGRadioRemote::remoteInGoingLow() {
     } else {
 
       if (captime > 10) { //logic 0 is 600us pulse, 50x10=500us
-        capbyte[capptr] <<= 1;
+        capbyte[capptr] >>= 1;
       }
       if (captime > 32) { //32*50us , more then 1600us
-        capbyte[capptr] |= 1;
+        capbyte[capptr] |= 0x80;
       }
       capbit++;
 
@@ -448,7 +448,7 @@ void VAGRadioRemote::remoteInGoingLow() {
     }
 
     if (capptr == 4) {
-      if (capbyte[0] == 0x41 && capbyte[1] == 0xE8 && capbyte[2] == 0xFF - capbyte[3]) {
+      if (capbyte[0] == FIRST_BYTE && capbyte[1] == SECOND_BYTE && capbyte[2] == 0xFF - capbyte[3]) {
         _newCode = capbyte[2];
         _gotNewCode = 1;
       }
@@ -461,12 +461,12 @@ void VAGRadioRemote::remoteInGoingLow() {
 
 String VAGRadioRemote::decodeRemote(uint8_t code) {
   /*
-       UP:       0x41E8D02F
-    DOWN: 0x41E850AF
-    LEFT:   0x41E840BF
-    RIGHT: 0x41E8C03F
-    VOL+:  0x41E8807F
-    VOL-:    0x41E800FF
+       UP:       0x8217 0x0B 0xF4
+    DOWN: 0x8217 0x0A 0xF5
+    LEFT:   0x8217 0x02 0xFD
+    RIGHT: 0x8217 0x03 0xFC
+    VOL+:  0x8217 0x01 0xFE
+    VOL-:    0x8217 0x00 0xFF
   */
   switch (code) {
     case VOLUMEDOWN: return F("Volume down");
@@ -484,24 +484,24 @@ String VAGRadioRemote::decodeRemote(uint8_t code) {
     case RANDOM: return F("random");
     case LEFT:
     case 0x42:
-    case 0x44:
+    case 0x22:
     case VW_LEFT: return F("Left FM1/FM2/AM 6-5-4-3-2-1 | CD/SD - Folder Down");
-    case 0x46: return F("LEFT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1");
+    case 0x62: return F("LEFT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1");
     case VW_RIGHT: return F("Right FM1/FM2/AM 1-2-3-4-5-5 | CD/SD - Folder Up");
     case DOWN:
-    case 0x52:
-    case 0x54:
-    case 0x56:
-    case 0x60:
-    case 0x62:
-    case 0x64: return F("Seek down/FR");
+    case 0x4A:
+    case 0x2A:
+    case 0x6A:
+    case CDDOWN:
+    case 0x46:
+    case 0x26: return F("Seek down/FR");
     case VOLUMEUP:
     case 0x81:
-    case 0x82:
-    case 0x83:
-    case 0x84:
-    case 0x85:
-    case 0x86: return F("Volume up");
+    case 0x41:
+    case 0xC1:
+    case 0x21:
+    case 0xA1:
+    case 0x61: return F("Volume up");
     case VW_VOICE_DIAL: return F("Voice Dail");
     case DOWN_2: return F("-2 Volume down bas/treble down/fade rear/bal left");
     case DOWN_4: return F("-4 Volume down bas/treble down/fade rear/bal left");
@@ -510,15 +510,15 @@ String VAGRadioRemote::decodeRemote(uint8_t code) {
     case TP: return F("TP");
     case SCAN: return F("SCAN");
     case MODE:
-    case 0xA2:
-    case 0xA4:
-    case 0xA6: return F("MODE");
+    case 0x45:
+    case 0x25:
+    case 0x65: return F("MODE");
     case RIGHT:
-    case 0xC2:
-    case 0xC4:
-    case 0xC6: return F("RIGHT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1");
-    case UP:
-    case 0x07: return F("Seek up/FF");
+    case 0x43:
+    case 0x23:
+    case 0x63: return F("RIGHT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1");
+    case CDUP:
+    case UP: return F("Seek up/FF");
   }
   return "unknown";
 }
