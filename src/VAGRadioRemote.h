@@ -13,7 +13,7 @@ input pin must have hardware interrupt (INTx), , output pin must not be input on
 
 #define REMOTE_PIN 2
 
-VAGRadioRemote remote(NULL, REMOTE_PIN);
+VAGRadioRemote remote(-1, REMOTE_PIN);
 
 void setup() {
   remote.begin();
@@ -35,7 +35,7 @@ void loop() {
 
 long last_update = 0;
 
-VAGRadioRemote remote(REMOTE_PIN,NULL);
+VAGRadioRemote remote(REMOTE_PIN,-1);
 
 void setup() {
   remote.begin();
