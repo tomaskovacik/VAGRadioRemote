@@ -517,8 +517,8 @@ String VAGRadioRemote::decodeRemote(uint8_t code) {
     case 0x43:
     case 0x23:
     case 0x63: return F("RIGHT FM1 6-5-4-3-2-1-FM2 6-5-4-3-2-1");
-    case CDUP:
-    case UP: return F("Seek up/FF");
+    case UP:
+    case CDUP: return F("Seek up/FF");
   }
   return "unknown";
 }
