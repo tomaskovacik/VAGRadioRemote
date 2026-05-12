@@ -397,6 +397,7 @@ if (sendPtr == 0 && counter == 0)
 }
 
 uint8_t VAGRadioRemote::bitLenght(uint8_t _byte,uint8_t _bit){
+	if (_outpin == PIN_UNSET) return 0;
 	digitalWrite(_outpin,HIGH);
 	if (!!(_byte & (1 << _bit)))
 		return 33;
