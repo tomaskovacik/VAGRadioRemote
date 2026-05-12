@@ -67,10 +67,10 @@ Steering Wheel) controller talks to the radio using only 1 wire(sort of , second
 
 `REM` line is 5V logic, idle state is HIGH (5V)
 
-- start bit:    ~9000us LOW ~4550us HIGH
-- logic 1:       ~600us LOW ~1700us HIGH 
-- logic 0:       ~600us LOW ~600us HIGH
-- stop bit:      ~600us LOW
+- start bit:    ~9000us LOW ~4500us HIGH
+- logic 1:       ~560us LOW ~1690us HIGH (total 2.25ms, NEC inverted)
+- logic 0:       ~560us LOW ~560us HIGH  (total 1.125ms, NEC inverted)
+- stop bit:      ~560us LOW
 
 The MFSW controller always sends a packet of 4 bytes to the radio.  It
 consists of 2 unknown header bytes, followed by a code byte, and finally

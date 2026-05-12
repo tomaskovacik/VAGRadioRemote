@@ -72,10 +72,10 @@ called `REM` (remote).
 
 `REM` line is 5V logic, idle state is HIGH (5V)
 
-- start bit:    9ms LOW 4.55ms HIGH
-- logic 1:      ~600us LOW ~1700us HIGH
-- logic 0:      ~600us LOW ~600us HIGH
-- stop bit:     ~600us LOW
+- start bit:    9ms LOW 4.5ms HIGH
+- logic 1:      ~560us LOW ~1690us HIGH (total 2.25ms, NEC inverted)
+- logic 0:      ~560us LOW ~560us HIGH  (total 1.125ms, NEC inverted)
+- stop bit:     ~560us LOW
 
 The MFSW controller always sends a packet of 4 bytes to the radio.  It
 consists of 2 unknown header bytes, followed by a code byte, and finally
@@ -267,11 +267,11 @@ if (sendPtr>0 && counter == 0)
 	{
 		case 67: //start bit, 9000us low
 			digitalWrite(_outpin,LOW); //made pin LOW
-			counter=177;//count form 186 to 0 for ~9000us
+			counter=180;//9000us / 50us = 180
 		break;
 		case 66: //start bit, 4500us high
 			digitalWrite(_outpin,HIGH);
-			counter=89;
+			counter=90;//4500us / 50us = 90
 		break;
 		//regular start of bit, 600us low
 		case 65:
@@ -331,7 +331,7 @@ if (sendPtr>0 && counter == 0)
 		case 44:
 		case 40:
 			digitalWrite(_outpin,HIGH);
-			counter=33;
+			counter=34;//NEC logic-1 space: 1687.5us ≈ 1700us; 1700us / 50us = 34
 		break;
 		case 32:
 			counter=VAGRadioRemote::bitLenght(data[0],0);
@@ -400,9 +400,9 @@ uint8_t VAGRadioRemote::bitLenght(uint8_t _byte,uint8_t _bit){
 	if (_outpin == PIN_UNSET) return 0;
 	digitalWrite(_outpin,HIGH);
 	if (!!(_byte & (1 << _bit)))
-		return 33;
+		return 34;//NEC logic-1 space: 1687.5us ≈ 1700us; 1700us / 50us = 34
 	else
-		return 11;
+		return 11;//NEC logic-0 space: 562.5us ≈ 550us; 550us / 50us = 11
 }
 
 void VAGRadioRemote::send(uint8_t _byte){ //send whole packet
