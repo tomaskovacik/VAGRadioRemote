@@ -13,7 +13,7 @@ input pin must have hardware interrupt (INTx), output pin must not be input only
 
 #define REMOTE_PIN 2
 
-VAGRadioRemote remote(NULL, REMOTE_PIN);
+VAGRadioRemote remote(-1, REMOTE_PIN);
 
 void setup() {
   remote.begin();
@@ -35,7 +35,7 @@ void loop() {
 
 long last_update = 0;
 
-VAGRadioRemote remote(REMOTE_PIN,NULL);
+VAGRadioRemote remote(REMOTE_PIN,-1);
 
 
 int h = 0x00;
@@ -116,11 +116,13 @@ telephone option:
 //#define USE_TIMER4
 //#define USE_TIMER5
 
+#define PIN_UNSET 255
+
 volatile static uint8_t data[2];
 volatile static uint8_t sendPtr=0;// 67 is stop => 9000ms,4500ms,4x8x2 + stopbit
 volatile static uint8_t counter=0;
-volatile static uint8_t _outpin;
-volatile static uint8_t _inpin;
+volatile static uint8_t _outpin = PIN_UNSET;
+volatile static uint8_t _inpin = PIN_UNSET;
 
 static volatile uint16_t captime = 0;
 static volatile uint8_t captureEnabled = 0;
@@ -136,16 +138,8 @@ static volatile uint8_t _newCode = 0;
 
 VAGRadioRemote::VAGRadioRemote(int8_t outpin,int8_t inpin)
 {
-if (outpin != -1){
-		#define _OUTPUT
-        	_outpin = outpin;
-}
-
-if (inpin != -1){
-		#define _INPUT
-		_inpin = inpin;
-}
-
+	_outpin = (outpin != -1) ? (uint8_t)outpin : PIN_UNSET;
+	_inpin  = (inpin  != -1) ? (uint8_t)inpin  : PIN_UNSET;
 }
 
 /**
@@ -240,33 +234,33 @@ void VAGRadioRemote::setTimer(void){
 void VAGRadioRemote::begin()
 {
 
-#ifdef _OUTPUT
-	pinMode(_outpin,OUTPUT);
-	digitalWrite(_outpin,HIGH);
-#endif
+	if (_outpin != PIN_UNSET) {
+		pinMode(_outpin,OUTPUT);
+		digitalWrite(_outpin,HIGH);
+	}
 
-#ifdef _INPUT
-	pinMode(_inpin, INPUT_PULLUP);
-	attachInterrupt(digitalPinToInterrupt(_inpin), &VAGRadioRemote::remoteInGoingLow, FALLING);
-#endif
+	if (_inpin != PIN_UNSET) {
+		pinMode(_inpin, INPUT_PULLUP);
+		attachInterrupt(digitalPinToInterrupt(_inpin), &VAGRadioRemote::remoteInGoingLow, FALLING);
+	}
 	VAGRadioRemote::setTimer();
 }
 
 ISR(__TIMERX_COMPA_vect)
 {
-#ifdef _INPUT
+  if (_inpin != PIN_UNSET) {
 
-  if (captureEnabled) {
-    captime++;
+    if (captureEnabled) {
+      captime++;
+    }
+
+    if (captime == 120 ) { //120x50us =>  6ms high pulse,
+      captime = capptr = captureEnabled = 0;
+      attachInterrupt(digitalPinToInterrupt(_inpin), &VAGRadioRemote::remoteInGoingLow, FALLING);
+    }
   }
 
-  if (captime == 120 ) { //120x50us =>  6ms high pulse,
-    captime = capptr = captureEnabled = 0;
-    attachInterrupt(digitalPinToInterrupt(_inpin), &VAGRadioRemote::remoteInGoingLow, FALLING);
-  }
-#endif
-
-#ifdef _OUTPUT
+  if (_outpin != PIN_UNSET) {
 if (sendPtr>0 && counter == 0)
 {
 	switch (sendPtr)
@@ -399,11 +393,11 @@ if (counter == 0)
 }
 if (sendPtr == 0 && counter == 0)
 	digitalWrite(_outpin,HIGH);	
-#endif
+  }
 }
 
-#ifdef _OUTPUT
 uint8_t VAGRadioRemote::bitLenght(uint8_t _byte,uint8_t _bit){
+	if (_outpin == PIN_UNSET) return 0;
 	digitalWrite(_outpin,HIGH);
 	if (!!(_byte & (1 << _bit)))
 		return 33;
@@ -412,14 +406,14 @@ uint8_t VAGRadioRemote::bitLenght(uint8_t _byte,uint8_t _bit){
 }
 
 void VAGRadioRemote::send(uint8_t _byte){ //send whole packet
+	if (_outpin == PIN_UNSET) return;
 	data[0]=_byte;
 	data[1]=CRC(_byte);
 	sendPtr=SENDPOINTERTOP;
 }
-#endif
 
-#ifdef _INPUT
 void VAGRadioRemote::remoteInGoingHigh() {
+  if (_inpin == PIN_UNSET) return;
   captime = 0; //reset timer
   if (capptr < 4) {
     captureEnabled = 1; //we capturing only when capture pointer is less then 4th byte.
@@ -428,6 +422,7 @@ void VAGRadioRemote::remoteInGoingHigh() {
 }
 
 void VAGRadioRemote::remoteInGoingLow() {
+  if (_inpin == PIN_UNSET) return;
   if (captureEnabled) {
     //we have ticked in some data, lets calculate what we capture
     captureEnabled = 0; //disable future counting in timer2
@@ -456,8 +451,8 @@ void VAGRadioRemote::remoteInGoingLow() {
       if (capbyte[0] == 0x41 && capbyte[1] == 0xE8 && capbyte[2] == 0xFF - capbyte[3]) {
         _newCode = capbyte[2];
         _gotNewCode = 1;
-        capptr = 0;
       }
+      capptr = 0;
     }
 
   }
@@ -529,23 +524,25 @@ String VAGRadioRemote::decodeRemote(uint8_t code) {
 }
 
 String VAGRadioRemote::decodeRemote(){
+	if (_inpin == PIN_UNSET) return "";
 	return decodeRemote(_newCode);
 }
 
 uint8_t VAGRadioRemote::gotNewCode(){
+	if (_inpin == PIN_UNSET) return 0;
 	return _gotNewCode;
 }
 
 uint8_t VAGRadioRemote::newCode(){
+	if (_inpin == PIN_UNSET) return 0;
 	return _newCode;
 }
 
 void VAGRadioRemote::clearGotNewCode(){
+	if (_inpin == PIN_UNSET) return;
 	_gotNewCode=0;
 }
-#endif
 
-#ifdef _OUTPUT
 void VAGRadioRemote::up(){
 	VAGRadioRemote::send(UP);
 }
@@ -620,4 +617,3 @@ void VAGRadioRemote::scan(){
 void VAGRadioRemote::mode(){
 	VAGRadioRemote::send(MODE);
 }
-#endif

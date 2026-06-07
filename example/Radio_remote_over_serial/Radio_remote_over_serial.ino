@@ -184,7 +184,6 @@ void loop() {
         Serial.println("volume up");
         break;
       case 'h': //help
-        remote.volumeDown();
         Serial.println("m = mode");
         Serial.println("R = random");
         Serial.println("r = right");
